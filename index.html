@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>格子图生成器</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- 控制面板 -->
+        <aside class="panel">
+            <h2 class="panel-title">控制面板</h2>
+            
+            <section class="section">
+                <h3 class="section-title">格子设置</h3>
+                
+                <div class="control-group">
+                    <label class="control-label">格子类型</label>
+                    <div class="type-badge">自定义格子</div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="range-header">
+                        <label class="control-label">行数</label>
+                        <span class="range-value" id="rowsValue">7</span>
+                    </div>
+                    <input type="range" id="rowsInput" min="1" max="20" value="7" class="range-slider">
+                </div>
+                
+                <div class="control-group">
+                    <div class="range-header">
+                        <label class="control-label">列数</label>
+                        <span class="range-value" id="colsValue">8</span>
+                    </div>
+                    <input type="range" id="colsInput" min="1" max="20" value="8" class="range-slider">
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">线条颜色</label>
+                    <div class="color-picker">
+                        <input type="color" id="lineColorInput" value="#E85D04">
+                        <span class="color-value" id="colorValue">#E85D04</span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <div class="range-header">
+                        <label class="control-label">线条透明度</label>
+                        <span class="range-value" id="opacityValue">0.7</span>
+                    </div>
+                    <input type="range" id="opacityInput" min="0.1" max="1" step="0.05" value="0.7" class="range-slider">
+                </div>
+                
+                <div class="control-group">
+                    <div class="range-header">
+                        <label class="control-label">线条粗细</label>
+                        <span class="range-value"><span id="widthValue">2</span>px</span>
+                    </div>
+                    <input type="range" id="widthInput" min="1" max="10" value="2" class="range-slider">
+                </div>
+                
+                <div class="control-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="showLabelsInput" checked>
+                        <span class="checkmark"></span>
+                        显示格子标签（A1, B2 等）
+                    </label>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h3 class="section-title">纸张格式</h3>
+                <p class="section-desc">选择你的图纸尺寸（毫米）</p>
+                
+                <div class="control-group">
+                    <label class="control-label">选择格式</label>
+                    <select id="paperFormatSelect" class="select-input">
+                        <option value="custom">自定义</option>
+                        <option value="a4">A4 (210 × 297 mm)</option>
+                        <option value="a5">A5 (148 × 210 mm)</option>
+                        <option value="letter">Letter (216 × 279 mm)</option>
+                    </select>
+                </div>
+                
+                <div class="dimension-group">
+                    <div class="dimension-field">
+                        <label class="control-label">宽度 (mm)</label>
+                        <input type="number" id="widthMmInput" value="180" min="10" max="1000">
+                    </div>
+                    <div class="dimension-field">
+                        <label class="control-label">高度 (mm)</label>
+                        <input type="number" id="heightMmInput" value="125" min="10" max="1000">
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <div class="image-control">
+                    <h3 class="section-title">图片</h3>
+                    <button id="changeImageBtn" class="link-btn">换一张图</button>
+                </div>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="imageUpload" accept="image/*" hidden>
+                    <div class="upload-placeholder">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span>点击或拖拽上传图片</span>
+                    </div>
+                </div>
+            </section>
+        </aside>
+        
+        <!-- 主预览区 -->
+        <main class="preview-area">
+            <h2 class="preview-title">格子预览</h2>
+            
+            <div class="toolbar">
+                <button id="toggleGrayscaleBtn" class="tool-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20z" fill="currentColor" fill-opacity="0.3"></path>
+                    </svg>
+                    转为黑白
+                </button>
+                <button id="downloadBtn" class="tool-btn primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    下载格子图
+                </button>
+            </div>
+            
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="gridCanvas"></canvas>
+            </div>
+        </main>
+        
+        <!-- 打印指南 -->
+        <aside class="guide">
+            <h2 class="guide-title">打印指南</h2>
+            <p class="guide-intro">按 Custom 尺寸（<span id="guideWidth">180</span> × <span id="guideHeight">125</span> mm）打印时：</p>
+            <ul class="guide-list" id="guideList">
+                <!-- 动态生成 -->
+            </ul>
+        </aside>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
